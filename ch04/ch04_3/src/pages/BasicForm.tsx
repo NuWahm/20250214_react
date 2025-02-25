@@ -67,6 +67,7 @@ export default function BasicForm() {
               type="text"
               className="input input-primary"
               ref={refName}
+              name="name"
               id="name"
               value={name}
               onChange={onChangeName}
@@ -82,6 +83,7 @@ export default function BasicForm() {
               type="email"
               className="input input-primary"
               ref={refEmail}
+              name="email"
               id="email"
               value={email}
               onChange={onChangeEmail}

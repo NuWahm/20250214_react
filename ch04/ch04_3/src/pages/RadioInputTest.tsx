@@ -34,7 +34,7 @@ export default function RadioInputTest() {
 
   return (
     <section className="mt-4">
-      <Title>RdioInputTest</Title>
+      <Title>RadioInputTest</Title>
       <div className="flex flex-col justify-center mt-4">
         <Subtitle>What is your job?</Subtitle>
         <Subtitle className="mt-4">Selected Job: {selectedJobTitle} </Subtitle>

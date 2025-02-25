@@ -24,6 +24,7 @@ export default function ObjectState() {
       }
       // value:인코딩하려는 값, replace: 인코딩하길 원하는 프로퍼티가있는 배열 또는 함수, space: 공백문자수
       alert(JSON.stringify(form, null, 2))
+      
     },
     [form]
   )

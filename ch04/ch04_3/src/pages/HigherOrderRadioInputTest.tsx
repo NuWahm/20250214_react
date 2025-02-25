@@ -8,8 +8,13 @@ export default function HigherOrderRadioInputTest() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0)
 
   const onChange = useCallback(
-    // 고차함수 사용 이유: index가 달라서 함수가 가변적이기 때문에 타입 불일치해서 사용
-    (index: number) => () => setSelectedIndex(notUsed => index),
+    // 고차함수 사용 이유: useCallback의 함수는 () => {} 형태이기 때문에 
+    // 일반함수를 먼저 사용해 index를 넘겨주고 리턴되는 함수를 ()=>{} 형태로 정의
+    // (index: number) => () setSelectedIndex(notUsed=>index),[])
+    (index: number) => {
+      console.log('selected:', jobTitles[index], index)
+      setSelectedIndex(notUsed => index)
+    },
     [selectedIndex]
   )
   const radioInputs = useMemo(
@@ -22,17 +27,17 @@ export default function HigherOrderRadioInputTest() {
             className="mr-4 radio radio-primary"
             checked={index === selectedIndex}
             defaultValue={value}
-            onChange={onChange(index)}
+            onChange={() => onChange(index)}
           />
           <span className="label-text">{value}</span>
         </label>
       )),
-    [jobTitles, selectedIndex, onChange]
+    [jobTitles, selectedIndex]
   )
 
   return (
     <section className="mt-4">
-      <Title>RdioInputTest</Title>
+      <Title>RadioInputTest</Title>
       <div className="flex flex-col justify-center mt-4">
         <Subtitle>What is your job?</Subtitle>
         <Subtitle className="mt-4">Selected Job: {jobTitles[selectedIndex]} </Subtitle>
