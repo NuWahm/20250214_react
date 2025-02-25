@@ -40,7 +40,7 @@ export default function BasicForm() {
       }
       return
     }
-    if (email === '') {
+    if (refEmail.current?.value === '') {
       alert('Please Check Email')
       if (refEmail.current !== null) refEmail.current.focus()
       return

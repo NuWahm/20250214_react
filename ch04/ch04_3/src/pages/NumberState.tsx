@@ -48,8 +48,8 @@ export default function NumberState() {
   // count의존성 목록에 없어도 값은 증가, 그러나 내부 count변수의 값을 변경되지 않는다.
   const increment = useCallback(() => {
     setCount(function (count) {
-        return count + 1
-      }) // 블럭 외에서 함수의 매개변수 형태로 호출하기에 변한다.
+      return count + 1
+    }) // 블럭 외에서 함수의 매개변수 형태로 호출하기에 변한다.
     console.log('count inc: ', count) // 블럭 안에서 count변수를 호출해도 변화가 없다.
   }, [])
 

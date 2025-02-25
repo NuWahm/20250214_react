@@ -8,12 +8,12 @@ export default function HigherOrderRadioInputTest() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0)
 
   const onChange = useCallback(
-    // 고차함수 사용 이유: useCallback의 함수는 () => {} 형태이기 때문에 
-    // 일반함수를 먼저 사용해 index를 넘겨주고 리턴되는 함수를 ()=>{} 형태로 정의
-    // (index: number) => () setSelectedIndex(notUsed=>index),[])
-    (index: number) => {
+    // 고차함수 사용 이유: useCallback의 함수는 ()=>{} 형태이기 때문에
+    // 일반함수를 먼저사용하여 원하는 값을 전달하고 리턴되는 함수를 ()=>{} 형태로 정의함.
+    // (index: number) => () => setSelectedIndex(notUsed=>index),[])
+    (index: number) => () => {
       console.log('selected:', jobTitles[index], index)
-      setSelectedIndex(notUsed => index)
+      return setSelectedIndex(notUsed => index)
     },
     [selectedIndex]
   )
@@ -27,7 +27,7 @@ export default function HigherOrderRadioInputTest() {
             className="mr-4 radio radio-primary"
             checked={index === selectedIndex}
             defaultValue={value}
-            onChange={() => onChange(index)}
+            onChange={onChange(index)}
           />
           <span className="label-text">{value}</span>
         </label>
