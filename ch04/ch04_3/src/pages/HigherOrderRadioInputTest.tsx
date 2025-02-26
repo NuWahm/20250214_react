@@ -6,7 +6,7 @@ export default function HigherOrderRadioInputTest() {
   const jobTitles = useMemo(() => D.makeArray(4).map(D.randomJobTitle), [])
 
   const [selectedIndex, setSelectedIndex] = useState<number>(0)
-
+                       
   const onChange = useCallback(
     // 고차함수 사용 이유: useCallback의 함수는 ()=>{} 형태이기 때문에
     // 일반함수를 먼저사용하여 원하는 값을 전달하고 리턴되는 함수를 ()=>{} 형태로 정의함.
