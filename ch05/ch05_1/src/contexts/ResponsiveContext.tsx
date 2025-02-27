@@ -10,15 +10,16 @@ type ContextType = {
 const defaultContextValue: ContextType = {
   breakpoint: '' // 공유 시키려는 데이터 속성 초기값
 }
-// createContext 함수 호출 시 Context 객체가 Provider, Consumer를 제공
+// createContext 함수호출하면 컨텍스트 객체가 Provider, Consumer(클.컴.용)를 제공
 export const ResponsiveContext = createContext<ContextType>(defaultContextValue)
 
 type ResponsiveProviderProps = {} // 빈객체
+
 export const ResponsiveProvider: FC<PropsWithChildren<ResponsiveProviderProps>> = ({
   children,
   ...props
 }) => {
-  //구조분해할당할 때 개수가 맞지 않을 때 순서대로 전달
+  //구조분해할당할 때 개수가 맞지 않을 때 순서대로 전달, 이벤트도 처리
   const [width] = useWindowResize() // [width, height]
   // prettier-ignore
   const breakpoint = width < 640 ? 'sm' : 
@@ -30,12 +31,12 @@ export const ResponsiveProvider: FC<PropsWithChildren<ResponsiveProviderProps>> 
   const value = {
     breakpoint // breakpoint: breakpoint를 간결하게 구현한 것입니다.
   }
-  // Provider
+  // Provider에는 value와 children 속성을 지정해줘야 한다.
   return <ResponsiveContext.Provider value={value} children={children} />
 }
 
 // Context에 있는 breakpoint를 끄집어 내기 위해서 선언된 사용자 리액트 훅 함수
-export const useResponsive = function () {
-  const { breakpoint } = useContext(ResponsiveContext)
+export const useResponsive = () => {
+  const {breakpoint} = useContext(ResponsiveContext)
   return breakpoint
 }

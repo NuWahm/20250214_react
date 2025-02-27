@@ -1,15 +1,13 @@
-import ClickTest from './pages/ResponsiveContextTest'
+import ResponsiveContextTest from './pages/ResponsiveContextTest'
+import {ResponsiveProvider} from './contexts'
 
-function App() {
+export default function App() {
   return (
-    <main>
-      <h1 className="bg-blue-500 text-white text-5xl text-center p-3">
-        useContext - React가 제공하는 가장 막강한 기능 컴포넌트들의 데이터, 함수를 공유!
-      </h1>
-      <ResponsiveCon
-      textTest />
-    </main>
+    // 모든 Context 제공자는 가장 최상위 Component로 동작해야한다는 
+    <ResponsiveProvider>
+      <main>
+        <ResponsiveContextTest />
+      </main>
+    </ResponsiveProvider>
   )
 }
-
-export default App
