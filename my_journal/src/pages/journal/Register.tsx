@@ -1,5 +1,4 @@
-
-import {FormEvent, useCallback, useRef, useState} from 'react'
+import {FormEvent, useCallback, useEffect, useRef, useState} from 'react'
 import {useToken} from '../../hooks'
 import {useNavigate, useSearchParams} from 'react-router-dom'
 
@@ -17,6 +16,31 @@ export function Register() {
   const refFile = useRef<HTMLInputElement | null>(null)
   const refTitle = useRef<HTMLInputElement | null>(null)
   const refContent = useRef<HTMLTextAreaElement | null>(null)
+  const [mid, setMid] = useState('')
+
+  useEffect(() => {
+    const email = sessionStorage.getItem('email')
+    const url = 'http://localhost:8080/apiserver/members/get'
+    if (token) {
+      fetch(url + '?email=' + email, {
+        method: 'GET',
+        headers: {Authorization: `Bearer ${token}`}
+      })
+        .then(res => {
+          if (res.status !== 200) {
+            throw new Error(`HTTP error! status: ${res.status}`)
+          }
+          return res.json()
+        })
+        .then(data => {
+          console.log('>>>', data.mid)
+          setMid(data.mid)
+        })
+        .catch(err => {
+          console.log('Error:', err)
+        })
+    }
+  }, [token])
 
   const transform = (str: string) => {
     return str.replace(/\n/g, '')
@@ -60,7 +84,8 @@ export function Register() {
         fetch(removeUrl + fileName, {
           method: 'POST',
           dataType: 'json',
-          fileName: fileName
+          fileName: fileName,
+          headers: {Authorization: `Bearer ${token}`}
         })
           .then(response => response.json())
           .then(json => {
@@ -124,12 +149,12 @@ export function Register() {
 
     const formData = new FormData(e.currentTarget)
     const title = refTitle.current
-    if (title?.value) {
+    if (!title?.value) {
       title?.focus()
       return false
     }
     const content = refContent.current
-    if (content?.value) {
+    if (!content?.value) {
       content?.focus()
       return false
     }
@@ -138,9 +163,9 @@ export function Register() {
     let arr: PhotosDTO[] = []
     for (let i = 0; i < liArr.length; i++) {
       str += `
-            <input name="photosDTOList[${i}].photosName" value="${liArr[i].dataset.name}">
-            <input  name="photosDTOList[${i}].path" value="${liArr[i].dataset.path}">
-            <input name="photosDTOList[${i}].uuid" value="${liArr[i].dataset.uuid}">
+            <input type="hidden" name="photosDTOList[${i}].photosName" value="${liArr[i].dataset.name}">
+            <input type="hidden" name="photosDTOList[${i}].path" value="${liArr[i].dataset.path}">
+            <input type="hidden" name="photosDTOList[${i}].uuid" value="${liArr[i].dataset.uuid}">
           `
       arr.push({
         photosName: liArr[i].dataset.name,
@@ -154,9 +179,11 @@ export function Register() {
       formData.append(`photosDTOList[${index}].photosName`, photo.photosName)
       formData.append(`photosDTOList[${index}].path`, photo.path)
     })
+    // JounalDTO로 백엔드에 보내짐
     const formDataObj = {
       title: refTitle.current?.value ?? '',
       content: refContent.current?.value ?? '',
+      membersDTO: {mid: mid},
       photosDTOList: arr // PhotosDTO 타입의 배열 (클라이언트에서 JSON으로 보낼 데이터)
     }
     let resMessage = ''
@@ -207,11 +234,7 @@ export function Register() {
             <div className="col-md-10 col-lg-8 col-xl-7">
               <p></p>
               <div className="my-5">
-                <form
-                  id="frmSend"
-                  method="post"
-                  action="http://localhost:8080/apiserver/journal/register"
-                  onSubmit={journalSubmit}>
+                <form method="post" onSubmit={journalSubmit}>
                   <div className="form-floating">
                     <input
                       className="form-control"

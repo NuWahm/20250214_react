@@ -1,6 +1,6 @@
 import {Route, Routes} from 'react-router-dom'
 import Navigation from './Navigation'
-import {About, Contact, List, Register, Post} from '../../pages/journal'
+import {About, Contact, List, Register, Post, Modify} from '../../pages/journal'
 import Footer from './Footer'
 
 export default function Layout() {
@@ -12,6 +12,7 @@ export default function Layout() {
         <Route path="/list" element={<List />} />
         <Route path="/about" element={<About />} />
         <Route path="/post" element={<Post />} />
+        <Route path="/modify" element={<Modify />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/register" element={<Register />} />
       </Routes>

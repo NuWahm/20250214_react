@@ -1,6 +1,6 @@
 import {ChangeEvent, FormEvent, useCallback, useEffect, useRef, useState} from 'react'
 import {useToken} from '../../hooks'
-import {Link, useNavigate, useSearchParams} from 'react-router-dom'
+import {useNavigate, useSearchParams} from 'react-router-dom'
 
 interface MembersDTO {
   mid: number
@@ -131,11 +131,14 @@ export function List() {
     navigate(url + `?type=${typew}&keyword=${keywordw}&page=1`)
   }
 
-  const goRead = (fno: number, page: number, type: string, keyword: string) => {
-    location.href = `/post?fno=${fno}&page=${page}&type=${type}&keyword=${keyword}`
+  const goPost = (jno: number, page: number, type: string, keyword: string) => {
+    navigate(`/post?jno=${jno}&page=${page}&type=${type}&keyword=${keyword}`)
   }
   const goRegister = () => {
-    location.href = `/register?page=${pageRequestDTO.page}&type=${pageRequestDTO.type}&keyword=${pageRequestDTO.keyword}`
+    navigate(
+      `/register?page=${pageRequestDTO.page}&type=${pageRequestDTO.type}&keyword=${pageRequestDTO.keyword}`,
+      {replace: true}
+    )
   }
   const selChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
     if (e) {
@@ -244,10 +247,20 @@ export function List() {
                   {index != 0 ? <hr className="my-4" /> : ''}
                   {/* {index && <hr className="my-4" />} */}
                   <div className="post-preview">
-                    <Link to="/post">
+                    <a
+                      className="page-link"
+                      style={{cursor: 'pointer'}}
+                      onClick={() => {
+                        goPost(
+                          journal.jno,
+                          pageResultDTO.page,
+                          pageRequestDTO.type ?? '',
+                          pageRequestDTO.keyword ?? ''
+                        )
+                      }}>
                       <h2 className="post-title">{journal.title}</h2>
                       <h3 className="post-subtitle w-50 truncate">{journal.content}</h3>
-                    </Link>
+                    </a>
                     <p className="post-meta">
                       Posted by
                       <a href="#!"> {journal.membersDTO.nickname} </a>
@@ -274,12 +287,9 @@ export function List() {
                   <li className="page-item">
                     <a
                       className="page-link"
-                      href={`/journal/list?page=${Math.max(
-                        1,
-                        pageResultDTO.start - 1
-                      )}&type=${query.get('type') ?? ''}&keyword=${
-                        query.get('keyword') ?? ''
-                      }`}>
+                      href={`/list?page=${Math.max(1, pageResultDTO.start - 1)}&type=${
+                        query.get('type') ?? ''
+                      }&keyword=${query.get('keyword') ?? ''}`}>
                       Prev
                     </a>
                   </li>
@@ -303,7 +313,7 @@ export function List() {
                   <li className="page-item">
                     <a
                       className="page-link"
-                      href={`/journal/list?page=${pageResultDTO.end + 1}&type=${
+                      href={`/list?page=${pageResultDTO.end + 1}&type=${
                         query.get('type') ?? ''
                       }&keyword=${query.get('keyword') ?? ''}`}>
                       Next

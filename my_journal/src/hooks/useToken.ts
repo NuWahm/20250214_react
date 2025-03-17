@@ -5,7 +5,6 @@ export const useToken = () => {
 
   useEffect(() => {
     const sessionToken = sessionStorage.getItem('token')
-    console.log('token: ', sessionToken)
     if (sessionToken) {
       setToken(sessionToken)
     } else {
